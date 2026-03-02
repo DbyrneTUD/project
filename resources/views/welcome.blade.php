@@ -12,13 +12,12 @@
                     @guest
                     <p class="py-6 text-2xl">Register now to join a local community group and organise a lift!</p>
                     <div class="flex gap-3 justify-center">
-                    <a href="{{route('register')}}" class="btn btn-primary btn-xl">Register</a>
-                    <a href="{{route('login')}}" class="btn btn-success btn-xl">Login</a>
+                        <a href="{{route('register')}}" class="btn btn-primary btn-xl">Register</a>
+                        <a href="{{route('login')}}" class="btn btn-success btn-xl">Login</a>
                     </div>
                     @endguest
                     @auth
-                    <a href="{{route('dashboard')}}" class="btn btn-primary btn-xl">Continue to Dashboard</a>
-
+                        <a href="{{route('dashboard')}}" class="btn btn-primary btn-xl">Continue to Dashboard</a>
                     @endauth
                 </div>
             </div>

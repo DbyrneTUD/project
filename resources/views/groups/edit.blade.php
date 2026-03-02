@@ -1,0 +1,44 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-base-content leading-tight">
+            {{ ('Edit Group') }}
+        </h2>
+    </x-slot>
+    <div class="bg-base-100 min-h-screen">
+        <div class="mx-auto max-w-lg">
+
+            <div class="card bg-base-200 shadow-lg border border-base-300">
+                <div class="card-body">
+                    <h1 class="card-title text-3xl">Edit Group Details</h1>
+                    <p class="text-sm">Update below fields to update your group details</p>
+                    <form method="POST" action="{{ route('groups.update', $group) }}" class="mt-4">
+                        @csrf
+                        @method('PATCH')
+                        <!-- Name -->
+                        <div>
+                            <x-input-label for="name" :value="('Group Name')" />
+                            <x-text-input id="name" class="p-1 block mt-1 w-full h-8 bg-base-100" type="text" name="name" :value="$group->name" required autofocus />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        <!-- Description-->
+                        <div class="mt-4">
+                            <x-input-label for="description" :value="('Description (Optional)')" />
+                            <x-text-input id="description" class="p-1 block h-8 mt-1 w-full bg-base-100" type="description" name="description" :value="$group->description" />
+                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                        </div>
+
+                        <div class="flex items-center justify-end mt-4 gap-5">
+                            <a class="btn btn-outline btn-error btn-md" href="{{ route('groups.show', $group) }}">
+                                Cancel
+                            </a>
+
+                            <button type="submit" class="btn btn-primary btn-md">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</x-app-layout>

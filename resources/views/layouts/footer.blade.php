@@ -1,7 +1,7 @@
 <footer class="footer footer-horizontal footer-center bg-base-300 text-base-content p-10">
     <nav class="grid grid-flow-col gap-4">
-        <a class="link link-hover">Home</a>
-        <a class="link link-hover">Groups</a>
+        <a href="{{route('dashboard.index')}}" class=" link link-hover">Home</a>
+        <a href="{{route('groups.index')}}" class="link link-hover">Groups</a>
         <a class="link link-hover">Trips</a>
         <a class="link link-hover">Profile</a>
     </nav>
