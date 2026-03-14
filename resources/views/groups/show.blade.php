@@ -30,8 +30,8 @@
             @else
                 @foreach($requests as $request)
                     <div class="card bg-base-200 shadow-lg border border-base-300 ">
-                        <div class="card-body space-y-6">
-                            <div class="flex justify-between">
+                        <div class="card-body space-y-6 ">
+                            <div class="flex justify-between ">
                                 <div class="font-semibold text-2xl">
                                     {{$request->origin}} - {{$request->destination}}
                                 </div>

@@ -8,9 +8,9 @@ class DashboardController extends Controller
     {
         $myGroups = auth()->user()->groups()->latest()->paginate(3);
 
-        $myRequests = auth()->user()->liftRequests()->latest()->get();
+        $myRequests = auth()->user()->liftRequests()->where('status', '!=', 'completed')->latest()->get();
 
-        $myDrivingTrips = auth()->user()->drivingTrips()->latest()->get();
+        $myDrivingTrips = auth()->user()->drivingTrips()->where('status', '!=', 'completed')->latest()->get();
 
         return view('dashboard', [
             'myGroups' => $myGroups,

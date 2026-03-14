@@ -16,25 +16,32 @@
             @else
             <div class="grid grid-cols-1 gap-6">
                 @foreach($myGroups as $group)
-                    <div class="card bg-base-200 shadow-lg border border-base-300 ">
-                        <div class="card-body space-y-4">
-                            <div class="flex items-start justify-between">
-                                <h2 class="card-title text-xl">
-                                    {{$group->name}}
-                                </h2>
-                                @if($group->created_by === auth()->id())
-                                    <span class="badge badge-outline badge-primary font-semibold h-8">
-                                        Admin
-                                    </span>
-                                @endif
-                            </div>
-                            <p class="text-md">
-                                {{$group->description ?? 'No description provided for this group'}}
-                            </p>
-                            <div class="card-actions justify-end">
-                                    <a href="{{route('groups.show', $group)}}" class="btn btn-accent btn-md">
-                                        View Group
-                                    </a>
+                    <div class="card bg-base-200 shadow-lg border border-base-300 overflow-hidden">
+                        <div class="flex">
+                            @if($group->photo_path)
+                                <div>
+                                    <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover h-full w-60">
+                                </div>
+                            @endif
+                            <div class="card-body space-y-4">
+                                <div class="flex items-start justify-between">
+                                    <h2 class="card-title text-xl">
+                                        {{$group->name}}
+                                    </h2>
+                                    @if($group->created_by === auth()->id())
+                                        <span class="badge badge-outline badge-primary font-semibold h-8">
+                                            Admin
+                                        </span>
+                                    @endif
+                                </div>
+                                <p class="text-md">
+                                    {{$group->description ?? 'No description provided for this group'}}
+                                </p>
+                                <div class="card-actions justify-end">
+                                        <a href="{{route('groups.show', $group)}}" class="btn btn-accent btn-md">
+                                            View Group
+                                        </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,7 +65,7 @@
                         <div class="card bg-base-200 shadow-lg border border-base-300 ">
                             <div class="card-body space-y-4">
                                 <div class="flex items-start justify-between">
-                                    <h2 class="card-title">
+                                    <h2 class="card-title mr-2">
                                         {{$request->origin}} - {{$request->destination}}
                                     </h2>
 
@@ -81,33 +88,33 @@
             @endif
 
 
-            <div class="mx-auto mt-3 h-1 w-auto rounded bg-accent"></div>
-            <h1 class="text-2xl font-bold">Trips Im Driving:</h1>
+            <div class="mx-auto mt-3 h-1 w-auto rounded bg-accent "></div>
+            <h1 class="text-2xl font-bold">Upcoming Trips Im Driving:</h1>
             @if($myDrivingTrips->isEmpty())
-                <div class="card bg-base-200 border border-base-300 ">
-                    <div class="card-body">
+                <div class="card bg-base-200 border border-base-300 mb-10">
+                    <div class="card-body ">
                         <p>You are not the driver for any trips yet. </p>
                     </div>
                 </div>
             @else
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                     @foreach($myDrivingTrips as $trip)
                         <div class="card bg-base-200 shadow-lg border border-base-300 ">
                             <div class="card-body space-y-4">
                                 <div class="flex items-start justify-between">
                                     <h2 class="card-title text-xl">
-                                        {{$request->origin}} - {{$request->destination}}
+                                        {{$trip->liftRequest->origin}} - {{$trip->liftRequest->destination}}
                                     </h2>
-                                    <x-status-badge :status="$request->status" />
+                                    <x-status-badge :status="$trip->status" />
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <span class="font-semibold text-xl pb-5" >Requester: {{$trip->requester->name}}</span>
-                                    <span class="font-semibold" >Earliest Departure:</span> {{date('D j M Y, H:i', strtotime($request->earliest_departure))}}
-                                    <span class="font-semibold" >Latest Departure:</span> {{date('D j M Y, H:i', strtotime($request->latest_departure))}}
+                                    <span class="font-semibold" >Earliest Departure:</span> {{date('D j M Y, H:i', strtotime($trip->liftRequest->earliest_departure))}}
+                                    <span class="font-semibold" >Latest Departure:</span> {{date('D j M Y, H:i', strtotime($trip->liftRequest->latest_departure))}}
                                 </div>
                                 <div class="card-actions justify-end">
-                                    <a href="{{route('requests.show', [$trip->liftRequest->group_id, $trip->lift_request_id])}}" class="btn btn-accent btn-md">
-                                        View
+                                    <a href="{{route('trips.show', $trip)}}" class="btn btn-accent btn-md">
+                                        View Trip
                                     </a>
                                 </div>
                             </div>

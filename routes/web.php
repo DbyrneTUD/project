@@ -4,13 +4,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LiftRequestController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->middleware('guest');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,8 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups/{group}/requests/{liftRequest}/cancel', [LiftRequestController::class, 'cancel'])->name('requests.cancel');
     Route::post('/groups/{group}/requests/{liftRequest}/complete', [LiftRequestController::class, 'complete'])->name('requests.complete');
 
+    Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
 
 });
 

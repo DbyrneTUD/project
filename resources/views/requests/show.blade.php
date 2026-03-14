@@ -54,25 +54,78 @@
                                     @endif
                                     <p><span class="text-lg font-semibold" >Driver:</span> {{$request->trip->driver->name}}</p>
                                     <div class="card-actions justify-end gap-5">
-
-                                        @if (($request->trip->driver_id === auth()->id() || $request->requester_id === auth()->id()) && $request->trip->status !== 'completed')
-                                            <form method="POST" action="{{route('requests.cancel', [$group, $request])}}">
-                                                @csrf
-                                                <button class="btn btn-error">Cancel Trip</button>
-                                            </form>
-                                        @endif
-
-                                        @if ($request->trip->driver_id === auth()->id() && $request->trip->status !== 'completed')
-                                            <form method="POST" action="{{route('requests.complete', [$group, $request])}}">
-                                                @csrf
-                                                <button class="btn btn-accent">Complete Trip</button>
-                                            </form>
-                                        @endif
+                                        <a href="{{route('trips.show', $request->trip)}}" class="btn btn-accent btn-wide">View Trip</a>
                                     </div>
                                 @endif
                             </div>
+                            <div id="map" style="height: 400px;"></div>
                         </div>
                 </div>
         </div>
     </div>
+
+
+
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: "{{config('services.google_maps.key')}}", v: "weekly"});
+
+        // Initialize and add the map.
+        let map;
+        let mapPolylines = [];
+        const center= { lat: 53.333, lng: -6.248 };
+
+        // Initialize and add the map.
+        async function initMap() {
+
+            //  Request the needed libraries.
+            const [{Map}, {Place}, {Route}] = await Promise.all([
+                google.maps.importLibrary('maps'),
+                google.maps.importLibrary('places'),
+                google.maps.importLibrary('routes'),
+            ]);
+
+            map = new Map(document.getElementById('map'), {
+                center: center,
+                zoom:10,
+                mapTypeControl: false,
+                mapId: 'DEMO_MAP_ID',
+            });
+
+            // Define a routes request
+            const request = {
+                origin: "{{$request->origin}}, Ireland",
+                destination: "{{$request->destination}}, Ireland",
+                travelMode: 'DRIVING',
+                fields: ['path'],
+            };
+
+            // Call computeRoutes to get the directions.
+            const { routes, fallbackInfo, geocodingResults } = await Route.computeRoutes(request);
+            // Use createPolylines to create polylines for the route.
+            mapPolylines = routes[0].createPolylines();
+            // Add polylines to the map.
+            mapPolylines.forEach((polyline) => polyline.setMap(map));
+            // Create markers to start and end points.
+            const markers = await routes[0].createWaypointAdvancedMarkers();
+            // Add markers to the map
+            markers.forEach((marker) => marker.setMap(map));
+            // Display the raw JSON for the result in the console.
+            console.log(`Response:\n ${JSON.stringify(routes, null, 2)}`);
+            // Fit the map to the path.
+            fitMapToPath(routes[0].path);
+
+            // Helper function to fit the map to the path.
+            async function fitMapToPath(path) {
+                const { LatLngBounds } = (await google.maps.importLibrary('core'));
+                const bounds = new LatLngBounds();
+                path.forEach((point) => {
+                    bounds.extend(point);
+                });
+                map.fitBounds(bounds);
+            }
+        }
+        initMap();
+
+    </script>
 </x-app-layout>

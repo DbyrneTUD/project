@@ -9,10 +9,19 @@ class GroupController extends Controller
     //
     public function index()
     {
-        $groups = Group::latest()->paginate(3);
+        $q = request('q');
+
+        $groups = Group::latest();
+
+        if ($q) {
+            $groups->where('name', 'like', '%'.$q.'%')->orWhere('description', 'like', '%'.$q.'%');
+        }
+
+        $groups = $groups->paginate(5)->withQueryString();
 
         return view('groups.index', [
             'groups' => $groups,
+            'q' => $q,
         ]);
     }
 
@@ -26,12 +35,20 @@ class GroupController extends Controller
         request()->validate([
             'name' => ['required', 'min:3'],
             'description' => ['nullable'],
+            'photo' => ['nullable', 'image'],
         ]);
+
+        $photoPath = null;
+
+        if (request()->hasFile('photo')) {
+            $photoPath = request()->file('photo')->store('photos', 'public');
+        }
 
         $group = Group::create([
             'name' => request('name'),
             'description' => request('description'),
             'created_by' => auth()->id(),
+            'photo_path' => $photoPath,
         ]);
 
         $group->members()->attach(auth()->id());
@@ -91,11 +108,19 @@ class GroupController extends Controller
         request()->validate([
             'name' => ['required', 'min:3'],
             'description' => ['nullable'],
+            'photo' => ['nullable', 'image'],
         ]);
+
+        $photoPath = $group->photo_path;
+
+        if (request()->hasFile('photo')) {
+            $photoPath = request()->file('photo')->store('photos', 'public');
+        }
 
         $group->update([
             'name' => request('name'),
             'description' => request('description'),
+            'photo_path' => $photoPath,
         ]);
 
         return redirect("/groups/{$group->id}");

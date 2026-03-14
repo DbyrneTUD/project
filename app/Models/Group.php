@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Group extends Model
 {
     //
-    protected $fillable = ['name', 'description', 'created_by'];
+    protected $fillable = ['name', 'description', 'created_by', 'photo_path'];
 
     public function creator(): BelongsTo
     {

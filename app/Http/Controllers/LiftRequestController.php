@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\LiftRequest;
 use App\Models\Trip;
+use App\Notifications\LiftAccepted;
+use App\Notifications\LiftRequested;
+use Illuminate\Support\Facades\Notification;
 
 class LiftRequestController extends Controller
 {
@@ -32,7 +35,7 @@ class LiftRequestController extends Controller
             'latest_departure' => ['required', 'date'],
         ]);
 
-        LiftRequest::create([
+        $liftRequest = LiftRequest::create([
             'group_id' => $group->id,
             'requester_id' => auth()->id(),
             'origin' => request('origin'),
@@ -41,6 +44,8 @@ class LiftRequestController extends Controller
             'latest_departure' => request('latest_departure'),
             'status' => 'open',
         ]);
+
+        Notification::send($group->members, new LiftRequested($liftRequest));
 
         return redirect("/groups/{$group->id}");
     }
@@ -141,6 +146,8 @@ class LiftRequestController extends Controller
         $liftRequest->update([
             'status' => 'accepted',
         ]);
+
+        $liftRequest->requester->notify(new LiftAccepted($liftRequest));
 
         return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
     }
