@@ -5,11 +5,35 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LiftRequestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TripController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
 })->middleware('guest');
+
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $githubUser = Socialite::driver('github')->user();
+
+    $user = User::updateOrCreate([
+        'github_id' => $githubUser->id,
+    ], [
+        'name' => $githubUser->name,
+        'email' => $githubUser->email,
+        'password' => Str::random(40),
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -41,7 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-
 });
 
 require __DIR__.'/auth.php';

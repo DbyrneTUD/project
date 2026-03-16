@@ -54,7 +54,9 @@
                                     @endif
                                     <p><span class="text-lg font-semibold" >Driver:</span> {{$request->trip->driver->name}}</p>
                                     <div class="card-actions justify-end gap-5">
-                                        <a href="{{route('trips.show', $request->trip)}}" class="btn btn-accent btn-wide">View Trip</a>
+                                        @if($request->trip->driver_id === auth()->id() || $request->requester_id === auth()->id())
+                                            <a href="{{route('trips.show', $request->trip)}}" class="btn btn-accent btn-wide">View Trip</a>
+                                        @endif
                                     </div>
                                 @endif
                             </div>

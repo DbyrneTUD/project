@@ -14,6 +14,10 @@ class TripController extends Controller
             return redirect('/groups');
         }
 
+        if ($trip->driver_id !== auth()->id() && $trip->requester_id !== auth()->id()) {
+            return redirect("/groups/{$group->id}/requests/{$trip->liftRequest->id}");
+        }
+
         return view('trips.show', [
             'trip' => $trip,
             'group' => $group,
