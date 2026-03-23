@@ -6,6 +6,15 @@ use App\Models\Trip;
 
 class TripController extends Controller
 {
+    public function index()
+    {
+        $trips = Trip::where('driver_id', auth()->id())->orWhere('requester_id', auth()->id())->get();
+
+        return view('trips.index', [
+            'trips' => $trips,
+        ]);
+    }
+
     public function show(Trip $trip)
     {
         $group = $trip->liftRequest->group;

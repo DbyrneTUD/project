@@ -2,7 +2,7 @@
     <nav class="grid grid-flow-col gap-4">
         <a href="{{route('dashboard.index')}}" class=" link link-hover">Home</a>
         <a href="{{route('groups.index')}}" class="link link-hover">Groups</a>
-        <a class="link link-hover">Trips</a>
+        <a href="{{route('trips.index')}}" class="link link-hover">Trips</a>
         <a href="{{route('profile.edit')}}" class="link link-hover">Profile</a>
     </nav>
     <nav>

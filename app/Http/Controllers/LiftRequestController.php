@@ -185,7 +185,7 @@ class LiftRequestController extends Controller
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 
-        if ($liftRequest->trip->driver_id !== auth()->id()) {
+        if ($liftRequest->trip->requester_id !== auth()->id()) {
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 

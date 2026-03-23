@@ -7,13 +7,14 @@
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
+
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
@@ -22,7 +23,21 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
-
+        <div class="space-y-6">
+            @if($user->photo_path)
+                <div>
+                    <img src="{{asset('storage/' . $user->photo_path)}}" alt="{{$user->name}}" class="object-cover h-50 w-50 rounded ">
+                </div>
+            @endif
+            <x-input-label for="photo" :value="('Profile Photo (Optional)')" />
+            <input type="file" name="photo" class="file-input file-input-accent w-full bg-base-100">
+            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+        </div>
+        <div>
+            <x-input-label for="bio" :value="('Bio')" />
+            <textarea id="bio" name="bio" class="textarea textarea-lg" placeholder="Type your Bio here..">{{old('bio', $user->bio)}}</textarea>
+            <x-input-error :messages="$errors->get('bio')" class="mt-2" />
+        </div>
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />

@@ -10,7 +10,7 @@
             <ul class="menu menu-horizontal gap-5 px-1 text-base-content text-lg font-semibold">
                 <li><a href="{{route('dashboard.index')}}">Dashboard</a></li>
                 <li><a href="{{route('groups.index')}}">Groups</a></li>
-                <li><a>Trips</a></li>
+                <li><a href="{{route('trips.index')}}">Trips</a></li>
             </ul>
 
         @endauth
@@ -27,7 +27,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
                 </div>
             </a>
-            <a href="{{route('profile.edit')}}" class="btn btn-outline">Profile</a>
+            <a href="{{route('profile.show', auth()->user())}}" class="btn btn-outline">Profile</a>
             <form method="POST" action="{{route('logout')}}">
                 @csrf
                 <button type="submit" class="btn btn-outline btn-error font-bold">Logout</button>

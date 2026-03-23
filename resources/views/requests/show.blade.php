@@ -9,7 +9,7 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-3xl font-bold">Group: {{$group->name}}</h1>
 
-                <a href="{{route('groups.show', $group)}}" class="btn">Back</a>
+                <a href="{{url()->previous()}}" class="btn">Back</a>
             </div>
                 <div class="card bg-base-200 shadow-lg border border-base-300 ">
                         <div class="card-body space-y-6">
@@ -26,7 +26,7 @@
                                 <span class="text-lg font-semibold" >Latest Departure:</span> {{date('D j M Y, H:i', strtotime($request->latest_departure))}}
                             </div>
                             <div>
-                                <span class="text-lg font-semibold" >Requested by:</span> {{$request->requester->name}}
+                                <span class="text-lg font-semibold" >Requested by:</span><a href="{{route('profile.show', $request->requester)}}" class="link link-hover"> {{$request->requester->name}} </a>
                             </div>
                             <div class="flex flex-col justify-between gap-5">
                                 @if (! $request->trip)
@@ -52,7 +52,7 @@
                                     @else
                                         <p class="text-lg font-semibold">This request has been completed</p>
                                     @endif
-                                    <p><span class="text-lg font-semibold" >Driver:</span> {{$request->trip->driver->name}}</p>
+                                    <p><span class="text-lg font-semibold" >Driver:</span><a href="{{route('profile.show', $request->trip->driver)}}" class="link link-hover"> {{$request->trip->driver->name}} </a> </p>
                                     <div class="card-actions justify-end gap-5">
                                         @if($request->trip->driver_id === auth()->id() || $request->requester_id === auth()->id())
                                             <a href="{{route('trips.show', $request->trip)}}" class="btn btn-accent btn-wide">View Trip</a>

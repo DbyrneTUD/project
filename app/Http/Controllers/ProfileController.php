@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Trip;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +34,13 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        if (request()->hasFile('photo')) {
+            $photoPath = request()->file('photo')->store('photos', 'public');
+            $request->user()->photo_path = $photoPath;
+        }
+
+        $request->user()->bio = $request->bio;
+
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
@@ -56,5 +65,18 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show(User $user)
+    {
+
+        $liftsGiven = Trip::where('driver_id', $user->id)->whereNotNull('completed_at')->count();
+        $liftsTaken = Trip::where('requester_id', $user->id)->whereNotNull('completed_at')->count();
+
+        return view('profile.show', [
+            'user' => $user,
+            'liftsGiven' => $liftsGiven,
+            'liftsTaken' => $liftsTaken,
+        ]);
     }
 }

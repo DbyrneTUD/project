@@ -44,7 +44,7 @@
                                 <span class="text-lg font-semibold" >Latest Departure:</span> {{date('D j M Y, H:i', strtotime($request->latest_departure))}}
                             </div>
                             <div>
-                                <span class="text-lg font-semibold" >Requested by:</span> {{$request->requester->name}}
+                                <span class="text-lg font-semibold" >Requested by:</span> <a href="{{route('profile.show', $request->requester)}}" class="link link-hover"> {{$request->requester->name}} </a>
                             </div>
                             <a href="{{route('requests.show', [$group, $request])}}" class="btn btn-accent btn-md">
                                 View

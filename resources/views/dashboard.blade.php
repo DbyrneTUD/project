@@ -108,7 +108,7 @@
                                     <x-status-badge :status="$trip->status" />
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <span class="font-semibold text-xl pb-5" >Requester: {{$trip->requester->name}}</span>
+                                    <span class="font-semibold text-xl pb-5" >Requester: <a href="{{route('profile.show',$trip->requester)}}" class="link link-hover"> {{$trip->requester->name}} </a></span>
                                     <span class="font-semibold" >Earliest Departure:</span> {{date('D j M Y, H:i', strtotime($trip->liftRequest->earliest_departure))}}
                                     <span class="font-semibold" >Latest Departure:</span> {{date('D j M Y, H:i', strtotime($trip->liftRequest->latest_departure))}}
                                 </div>

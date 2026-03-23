@@ -1,7 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ ('Profile') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+            {{ ('Edit Profile') }}
+            <a href="{{route('profile.show', auth()->user())}}" class="btn btn-outline btn-wide">View Profile</a>
         </h2>
     </x-slot>
 

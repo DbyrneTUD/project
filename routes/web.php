@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
     Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
     Route::get('/groups/create', [GroupController::class, 'create'])->name('groups.create');
@@ -60,11 +61,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups/{group}/requests/{liftRequest}/cancel', [LiftRequestController::class, 'cancel'])->name('requests.cancel');
     Route::post('/groups/{group}/requests/{liftRequest}/complete', [LiftRequestController::class, 'complete'])->name('requests.complete');
 
+    Route::get('/trips', [TripController::class, 'index'])->name('trips.index');
     Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+
+    Route::get('/trips/{trip}/messages', [\App\Http\Controllers\MessageController::class, 'show'])->name('messages.show');
+    Route::post('/trips/{trip}/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
 });
 
 require __DIR__.'/auth.php';
