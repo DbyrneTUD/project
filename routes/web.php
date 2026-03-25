@@ -3,18 +3,22 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LiftRequestController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TripController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
 
+// Guest Route for welcome page
 Route::get('/', function () {
     return view('welcome');
 })->middleware('guest');
 
-
+// Github login/register routes
 Route::get('/auth/redirect', function () {
     return Socialite::driver('github')->redirect();
 });
@@ -35,6 +39,7 @@ Route::get('/auth/callback', function () {
     return redirect('/dashboard');
 });
 
+//Main auth routes for web app
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -66,10 +71,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-    Route::get('/trips/{trip}/messages', [\App\Http\Controllers\MessageController::class, 'show'])->name('messages.show');
-    Route::post('/trips/{trip}/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/trips/{trip}/messages', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/trips/{trip}/messages', [MessageController::class, 'store'])->name('messages.store');
+
+    Route::get('/trips/{trip}/review', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/trips/{trip}/review', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::post('/trips/{trip}/review/reply', [ReviewController::class, 'reply'])->name('reviews.reply');
 });
 
 require __DIR__.'/auth.php';

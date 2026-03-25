@@ -8,24 +8,27 @@
         <div class="mx-auto max-w-4xl space-y-10 pb-10">
             <div class="flex items-center justify-between">
                 <h1 class="text-3xl font-bold">Groups</h1>
-
+                <!-- Create group -->
                 <a href="{{route('groups.create')}}" class="btn btn-primary btn-wide">Create Group</a>
             </div>
+            <!-- Search -->
             <form method="GET" action="{{route('groups.index')}}">
                 <div>
                     <input name="q" value="{{request('q')}}" placeholder="Search Groups..." class="px-4 py-2 w-full border border-base-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" />
                 </div>
             </form>
-
+            <!-- List Groups -->
             <div class="flex flex-col gap-10">
                 @foreach($groups as $group)
                     <div class="card bg-base-200 shadow-lg border border-base-300 overflow-hidden">
                         <div class="flex">
+                            <!-- Group photo -->
                             @if($group->photo_path)
                                 <div>
                                     <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover h-full w-60">
                                 </div>
                             @endif
+                            <!-- Group Card Details-->
                             <div class="card-body space-y-6">
                                 <div class="flex justify-between">
                                     <h2 class="card-title text-2xl">
@@ -49,6 +52,7 @@
                                     Members: {{$group->members->count()}}
                                 </p>
 
+                                <!-- Group buttons view/join -->
                                 <div class="card-actions justify-end">
                                     @if (auth()->user()->groups->contains($group))
                                         <a href="{{route('groups.show', $group)}}" class="btn btn-accent btn-md">

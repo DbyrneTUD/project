@@ -6,6 +6,8 @@
     </x-slot>
     <div class="bg-base-100 min-h-screen">
         <div class="mx-auto max-w-4xl space-y-10">
+
+            <!-- Groups List -->
             <h1 class="text-2xl font-bold">My Groups:</h1>
             @if($myGroups->isEmpty())
                 <div class="card bg-base-200 border border-base-300 ">
@@ -51,7 +53,7 @@
             @endif
             <div class="mx-auto mt-3 h-1 w-auto rounded bg-accent "></div>
 
-
+            <!-- Users Lift requests  -->
             <h1 class="text-2xl font-bold">My Lift Requests:</h1>
             @if($myRequests->isEmpty())
                 <div class="card bg-base-200 border border-base-300 ">
@@ -87,7 +89,7 @@
 
             @endif
 
-
+            <!-- Trips where logged in user is the driver -->
             <div class="mx-auto mt-3 h-1 w-auto rounded bg-accent "></div>
             <h1 class="text-2xl font-bold">Upcoming Trips Im Driving:</h1>
             @if($myDrivingTrips->isEmpty())

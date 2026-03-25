@@ -13,6 +13,8 @@ class LiftRequestController extends Controller
 {
     public function create(Group $group)
     {
+
+        // only group members can create requests in each group
         if (! auth()->user()->groups->contains($group)) {
             return redirect('/groups');
         }
@@ -45,6 +47,7 @@ class LiftRequestController extends Controller
             'status' => 'open',
         ]);
 
+        // when a new request is created, notify all members in group
         Notification::send($group->members, new LiftRequested($liftRequest));
 
         return redirect("/groups/{$group->id}");
@@ -52,6 +55,7 @@ class LiftRequestController extends Controller
 
     public function show(Group $group, LiftRequest $liftRequest)
     {
+        // only group members can view a request
         if (! auth()->user()->groups->contains($group)) {
             return redirect('/groups');
         }
@@ -68,6 +72,7 @@ class LiftRequestController extends Controller
             return redirect('/groups');
         }
 
+        // only the user who created the request can edit it
         if ($liftRequest->requester_id !== auth()->id()) {
             return redirect("/groups/{$group->id}");
         }
@@ -127,14 +132,17 @@ class LiftRequestController extends Controller
             return redirect('/groups');
         }
 
+        // the requester cannot accept their own request
         if ($liftRequest->requester_id === auth()->id()) {
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 
+        // if a trip exists for this request it cannot be accepted again
         if ($liftRequest->trip) {
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 
+        // create a trip for this request once it has been accepted
         Trip::create([
             'lift_request_id' => $liftRequest->id,
             'driver_id' => auth()->id(),
@@ -143,10 +151,12 @@ class LiftRequestController extends Controller
             'accepted_at' => now(),
         ]);
 
+        // update status of request
         $liftRequest->update([
             'status' => 'accepted',
         ]);
 
+        // notify the requester that their request has been accepted
         $liftRequest->requester->notify(new LiftAccepted($liftRequest));
 
         return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
@@ -158,6 +168,7 @@ class LiftRequestController extends Controller
             return redirect('/groups');
         }
 
+        // only the driver and requester can cancel
         if ($liftRequest->trip->driver_id !== auth()->id() && $liftRequest->requester_id !== auth()->id()) {
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
@@ -185,10 +196,12 @@ class LiftRequestController extends Controller
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 
+        // only the requester can complete a trip
         if ($liftRequest->trip->requester_id !== auth()->id()) {
             return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
         }
 
+        // keep both request and trip status in sync
         $liftRequest->update([
             'status' => 'completed',
         ]);
@@ -198,6 +211,6 @@ class LiftRequestController extends Controller
             'completed_at' => now(),
         ]);
 
-        return redirect("/groups/{$group->id}/requests/{$liftRequest->id}");
+        return redirect("/trips/{$liftRequest->trip->id}");
     }
 }

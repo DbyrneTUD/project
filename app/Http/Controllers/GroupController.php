@@ -6,13 +6,13 @@ use App\Models\Group;
 
 class GroupController extends Controller
 {
-    //
     public function index()
     {
         $q = request('q');
 
         $groups = Group::latest();
 
+        // if search term is entered, filter results by name or description
         if ($q) {
             $groups->where('name', 'like', '%'.$q.'%')->orWhere('description', 'like', '%'.$q.'%');
         }
@@ -51,6 +51,7 @@ class GroupController extends Controller
             'photo_path' => $photoPath,
         ]);
 
+        // automatically add the group creator as a group member
         $group->members()->attach(auth()->id());
 
         return redirect('/groups');
@@ -67,15 +68,17 @@ class GroupController extends Controller
     {
         $group->members()->detach(auth()->id());
 
-        return redirect('/groups.index');
+        return redirect('/groups');
     }
 
     public function show(Group $group)
     {
+        // only group members can view group
         if (! auth()->user()->groups->contains($group)) {
             return redirect('/groups');
         }
 
+        // default to show all requests if no status is provided
         $status = request('status') ? request('status') : 'all';
 
         $requests = $group->liftRequests()->latest();
@@ -101,6 +104,8 @@ class GroupController extends Controller
 
     public function update(Group $group)
     {
+
+        // only the group creator can update the group
         if ($group->created_by !== auth()->id()) {
             return redirect('/groups');
         }
@@ -129,6 +134,7 @@ class GroupController extends Controller
 
     public function destroy(Group $group)
     {
+        // only the group creator can delete a group
         if ($group->created_by !== auth()->id()) {
             return redirect('/groups');
         }

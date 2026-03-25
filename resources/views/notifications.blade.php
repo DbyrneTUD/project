@@ -7,6 +7,7 @@
     <div class="bg-base-100 min-h-screen">
         <div class="mx-auto max-w-4xl space-y-10">
             <h1 class="text-2xl font-bold">Notifications</h1>
+            <!--DB Notifications List -->
             <div class="flex flex-col gap-6">
                 @foreach($notifications as $notification)
 

@@ -7,7 +7,7 @@
                 <h1 class="text-6xl font-bold">Need a Lift ?</h1>
                 <div class="mx-auto mt-3 h-1 w-auto rounded bg-primary"></div>
 
-
+                <!-- Register / Login Buttons -->
                 <div class="flex flex-col gap-3 ">
                     @guest
                     <p class="py-6 text-2xl">Register now to join a local community group and organise a lift!</p>

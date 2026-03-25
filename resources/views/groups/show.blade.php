@@ -10,6 +10,7 @@
                 <h1 class="text-3xl font-bold">{{ ("$group->name") }}</h1>
                 <a href="{{route('groups.index')}}" class="btn">Back</a>
             </div>
+            <!-- Group description-->
             <p class="text-lg">
                     {{$group->description ?? 'No description'}}
             </p>
@@ -18,6 +19,7 @@
                 <h2 class="text-2xl font-semibold">Lift Requests</h2>
                 <a href="{{route('requests.create', $group)}}" class="btn btn-primary btn-md">Create Lift Request</a>
             </div>
+            <!-- Filter requests by status-->
             <div class="flex gap-2">
                 <span class="text-lg font-semibold">Filter requests by:</span>
                 <a href="{{route('groups.show', [$group, 'status'=> 'all'])}}" class="btn btn-sm {{$status === 'all' ? 'btn-primary' : 'btn-outline'}}">All</a>
@@ -25,10 +27,12 @@
                 <a href="{{route('groups.show', [$group, 'status'=> 'accepted'])}}" class="btn btn-sm {{$status === 'accepted' ? 'btn-primary' : 'btn-outline'}}">Accepted</a>
                 <a href="{{route('groups.show', [$group, 'status'=> 'completed'])}}" class="btn btn-sm {{$status === 'completed' ? 'btn-primary' : 'btn-outline'}}">Completed</a>
             </div>
+            <!-- Requests List-->
             @if ($requests->isEmpty())
                 <p class="text-lg">No Lift Requests Posted</p>
             @else
                 @foreach($requests as $request)
+                    <!-- Request Card Details-->
                     <div class="card bg-base-200 shadow-lg border border-base-300 ">
                         <div class="card-body space-y-6 ">
                             <div class="flex justify-between ">
@@ -54,6 +58,7 @@
                 @endforeach
             @endif
             {{$requests->links()}}
+            <!-- Group creator actions edit/delete-->
             <div class="flex justify-end pt-20 gap-5 pb-10">
             @if ($group->created_by === auth()->id())
                 <a href="{{route('groups.edit', $group)}}" class="btn btn-accent btn-outline">Edit Group</a>

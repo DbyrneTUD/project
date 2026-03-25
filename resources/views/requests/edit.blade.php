@@ -42,6 +42,7 @@
                             <x-input-error :messages="$errors->get('latest_departure')" class="mt-2" />
                         </div>
 
+                        <!-- Save / Cancel Edit -->
                         <div class="flex items-center justify-end mt-4 gap-5">
                             <a class="btn btn-outline btn-error btn-md" href="{{ route('requests.show', [$group, $request]) }}">
                                 Cancel

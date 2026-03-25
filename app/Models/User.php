@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Trip::class, 'driver_id');
     }
+
+    public function reviewsReceived(): HasMany
+    {
+        return $this->hasMany(Review::class, 'driver_id');
+    }
 }

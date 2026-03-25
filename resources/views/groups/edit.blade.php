@@ -35,11 +35,12 @@
                             <x-input-error :messages="$errors->get('photo')" class="mt-2" />
                         </div>
 
+                        <!-- Cancel-->
                         <div class="flex items-center justify-end mt-4 gap-5">
                             <a class="btn btn-outline btn-error btn-md" href="{{ route('groups.show', $group) }}">
                                 Cancel
                             </a>
-
+                            <!-- Save -->
                             <button type="submit" class="btn btn-primary btn-md">Save changes</button>
                         </div>
                     </form>

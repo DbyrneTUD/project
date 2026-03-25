@@ -42,7 +42,7 @@
                         </div>
 
 
-
+                        <!-- Create / Cancel Request -->
                         <div class="flex items-center justify-end mt-4 gap-5">
                             <a class="btn btn-outline btn-error btn-md" href="{{ route('groups.show', $group) }}">
                                 Cancel

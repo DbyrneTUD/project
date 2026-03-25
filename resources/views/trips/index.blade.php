@@ -1,11 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-base-content leading-tight">
-            {{ ('Trip History') }}
+            {{ ('My Trip History') }}
         </h2>
     </x-slot>
     <div class="bg-base-100 min-h-screen">
         <div class="mx-auto max-w-4xl space-y-10">
+            <!-- My Trips Page -->
             <h1 class="text-2xl font-bold">My Trips</h1>
             <div class="flex flex-col gap-6">
                 @foreach($trips as $trip)

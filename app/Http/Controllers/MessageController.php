@@ -12,14 +12,17 @@ class MessageController extends Controller
     {
         $group = $trip->liftRequest->group;
 
+        // only group members can access the trip chat
         if (! auth()->user()->groups->contains($group)) {
             return redirect('/groups');
         }
 
+        // only the driver and requester of a trip can view and send messages
         if ($trip->driver_id !== auth()->id() && $trip->requester_id !== auth()->id()) {
             return redirect("/groups/{$group->id}/requests/{$trip->liftRequest->id}");
         }
 
+        // order messages by oldest first similar to messaging apps
         $messages = $trip->messages()->oldest()->get();
 
         return view('messages.show', [
@@ -50,6 +53,7 @@ class MessageController extends Controller
             'message' => request('message'),
         ]);
 
+        // when a message is sent notify other party
         if ($trip->driver_id === auth()->id()) {
             $trip->requester->notify(new NewMessage($message));
         } else {

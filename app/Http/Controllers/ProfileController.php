@@ -70,13 +70,24 @@ class ProfileController extends Controller
     public function show(User $user)
     {
 
+        // count trips where user was a driver
         $liftsGiven = Trip::where('driver_id', $user->id)->whereNotNull('completed_at')->count();
+        // count trips where user was a passenger
         $liftsTaken = Trip::where('requester_id', $user->id)->whereNotNull('completed_at')->count();
+
+        // get review information such as count, average rating and recent reviews for profile page
+        $reviewsReceivedCount = $user->reviewsReceived()->count();
+        $avgRating = $user->reviewsReceived()->avg('rating');
+        $reviews = $user->reviewsReceived()->latest()->paginate(10);
+
 
         return view('profile.show', [
             'user' => $user,
             'liftsGiven' => $liftsGiven,
             'liftsTaken' => $liftsTaken,
+            'reviewsReceivedCount' => $reviewsReceivedCount,
+            'avgRating' => $avgRating,
+            'reviews' => $reviews,
         ]);
     }
 }

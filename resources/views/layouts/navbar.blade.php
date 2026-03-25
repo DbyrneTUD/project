@@ -1,4 +1,5 @@
 <div class="navbar bg-base-200 shadow-sm">
+    <!-- Navbar Logo-->
     <div class="navbar-start pl-3 gap-3">
         <a href="/" class="flex items-center gap-3">
             <img src="{{asset('images/car1.png')}}" alt="logo" class="h-12 w-12" />
@@ -6,17 +7,19 @@
         </a>
     </div>
     <div class="navbar-center">
+        <!-- Main Navbar links center-->
         @auth
             <ul class="menu menu-horizontal gap-5 px-1 text-base-content text-lg font-semibold">
                 <li><a href="{{route('dashboard.index')}}">Dashboard</a></li>
                 <li><a href="{{route('groups.index')}}">Groups</a></li>
-                <li><a href="{{route('trips.index')}}">Trips</a></li>
+                <li><a href="{{route('trips.index')}}">My Trips</a></li>
             </ul>
-
         @endauth
     </div>
 
+
     <div class="navbar-end flex gap-3 pr-3">
+        <!-- Navbar profile, notifications, login/logout/register buttons-->
         @auth
             <span class="font-semibold px-3 text-lg">Hi, {{auth()->user()->name}}</span>
             <a href="{{route('notifications.index')}}" class="btn btn-ghost">

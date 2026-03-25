@@ -33,12 +33,12 @@
                             <input type="file" name="photo" class="file-input file-input-accent w-full bg-base-100">
                             <x-input-error :messages="$errors->get('photo')" class="mt-2" />
                         </div>
-
+                        <!-- Cancel-->
                         <div class="flex items-center justify-end mt-4 gap-5">
                             <a class="btn btn-outline btn-error btn-md" href="{{ route('groups.index') }}">
                                 Cancel
                             </a>
-
+                            <!-- Submit-->
                             <button type="submit" class="btn btn-primary btn-md">Create</button>
                         </div>
                     </form>
