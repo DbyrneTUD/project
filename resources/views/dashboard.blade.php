@@ -21,8 +21,8 @@
                     <div class="card bg-base-200 shadow-lg border border-base-300 overflow-hidden">
                         <div class="flex">
                             @if($group->photo_path)
-                                <div>
-                                    <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover h-full w-60">
+                                <div class="w-56 h-64 shrink-0">
+                                    <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover w-full h-full">
                                 </div>
                             @endif
                             <div class="card-body space-y-4">

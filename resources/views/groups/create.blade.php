@@ -20,7 +20,7 @@
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
-                        <!-- Destination-->
+                        <!-- Description-->
                         <div class="mt-4">
                             <x-input-label for="description" :value="('Description (Optional)')" />
                             <x-text-input id="description" class="p-1 block h-8 mt-1 w-full bg-base-100" type="text" name="description" :value="old('description')" />

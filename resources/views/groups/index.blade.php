@@ -24,8 +24,8 @@
                         <div class="flex">
                             <!-- Group photo -->
                             @if($group->photo_path)
-                                <div>
-                                    <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover h-full w-60">
+                                <div class="w-56 h-80 shrink-0">
+                                    <img src="{{asset('storage/' . $group->photo_path)}}" alt="{{$group->name}}" class="object-cover w-full h-full">
                                 </div>
                             @endif
                             <!-- Group Card Details-->
